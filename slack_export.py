@@ -8,6 +8,7 @@ import copy
 from datetime import datetime
 from pick import pick
 from time import sleep
+from retrying import retry
 
 # fetches the complete message history for a channel/group/im
 #
@@ -17,6 +18,7 @@ from time import sleep
 # slack.im
 #
 # channelId is the id of the channel/group/im you want to download history for.
+@retry(wait_exponential_multiplier=1000, wait_exponential_max=5000)
 def getHistory(pageableObject, channelId, pageSize = 100):
     messages = []
     lastTimestamp = None
